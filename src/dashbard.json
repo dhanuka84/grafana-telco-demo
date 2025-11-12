@@ -1,0 +1,911 @@
+{
+  "__inputs": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "10.0.0"
+    },
+    {
+      "type": "datasource",
+      "id": "csv",
+      "name": "CSV",
+      "version": "1.0.0"
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "targetKeys": [],
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "title": "Telco 5G Customer Experience (CX) Assurance",
+      "type": "row",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "title": "Avg. Network MOS Score (All Sectors)",
+      "type": "gauge",
+      "datasource": "DS_CEM",
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^call_mos_score$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 3.5
+              },
+              {
+                "color": "green",
+                "value": 4
+              }
+            ]
+          },
+          "mappings": [],
+          "unit": "short",
+          "decimals": 2,
+          "min": 1,
+          "max": 5
+        },
+        "overrides": []
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": "DS_CEM",
+          "refId": "A",
+          "schema": {
+            "fields": [
+              {
+                "name": "timestamp",
+                "type": "time"
+              },
+              {
+                "name": "call_mos_score",
+                "type": "number"
+              }
+            ],
+            "refId": "A"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Churn Risk $sector",
+      "type": "gauge",
+      "datasource": "DS_BUSINESS",
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^churn_risk_percent$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          },
+          "mappings": [],
+          "unit": "percent",
+          "decimals": 2,
+          "min": 0,
+          "max": 25
+        },
+        "overrides": []
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": "DS_BUSINESS",
+          "refId": "A",
+          "schema": {
+            "fields": [
+              {
+                "name": "timestamp",
+                "type": "time"
+              },
+              {
+                "name": "sector",
+                "type": "string"
+              },
+              {
+                "name": "churn_risk_percent",
+                "type": "number"
+              }
+            ],
+            "refId": "A"
+          }
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "filterByValue",
+                  "options": {
+                    "match": "all",
+                    "filters": [
+                      {
+                        "value": "${sector}",
+                        "property": "sector"
+                      }
+                    ]
+                  }
+                },
+                "property": "sector"
+              }
+            ],
+            "type": "include",
+            "match": "all"
+          }
+        }
+      ]
+    },
+    {
+      "title": "New Support Tickets $sector",
+      "type": "stat",
+      "datasource": "DS_BUSINESS",
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "/^new_support_tickets$/",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 20
+              }
+            ]
+          },
+          "mappings": [],
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": "DS_BUSINESS",
+          "refId": "A",
+          "schema": {
+            "fields": [
+              {
+                "name": "timestamp",
+                "type": "time"
+              },
+              {
+                "name": "sector",
+                "type": "string"
+              },
+              {
+                "name": "new_support_tickets",
+                "type": "number"
+              }
+            ],
+            "refId": "A"
+          }
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "filterByValue",
+                  "options": {
+                    "match": "all",
+                    "filters": [
+                      {
+                        "value": "${sector}",
+                        "property": "sector"
+                      }
+                    ]
+                  }
+                },
+                "property": "sector"
+              }
+            ],
+            "type": "include",
+            "match": "all"
+          }
+        }
+      ]
+    },
+    {
+      "title": "DEMO: Affected Customers (MOS < 3.5) in $sector",
+      "type": "table",
+      "datasource": "DS_CEM",
+      "gridPos": {
+        "h": 12,
+        "w": 18,
+        "x": 6,
+        "y": 7
+      },
+      "options": {
+        "sortBy": [
+          {
+            "displayName": "call_mos_score",
+            "desc": false
+          }
+        ],
+        "footer": {
+          "reducer": [
+            "count"
+          ],
+          "countRows": true,
+          "fields": []
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 3.5
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "call_mos_score"
+            },
+            "properties": {
+              "unit": "short",
+              "decimals": 2
+            }
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "video_buffer_rate"
+            },
+            "properties": {
+              "unit": "percent",
+              "decimals": 1
+            }
+          }
+        ]
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": "DS_CEM",
+          "refId": "A",
+          "schema": {
+            "fields": [
+              {
+                "name": "timestamp",
+                "type": "time"
+              },
+              {
+                "name": "user_id",
+                "type": "string"
+              },
+              {
+                "name": "tower_id",
+                "type": "string"
+              },
+              {
+                "name": "app_in_use",
+                "type": "string"
+              },
+              {
+                "name": "call_mos_score",
+                "type": "number"
+              },
+              {
+                "name": "video_buffer_rate",
+                "type": "number"
+              }
+            ],
+            "refId": "A"
+          }
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "filterByValue",
+                  "options": {
+                    "match": "all",
+                    "filters": [
+                      {
+                        "value": 3.5,
+                        "property": "call_mos_score",
+                        "operator": "<"
+                      }
+                    ]
+                  }
+                },
+                "property": "call_mos_score"
+              }
+            ],
+            "type": "include",
+            "match": "all"
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "user_id": {
+                "aggregator": "first",
+                "operation": "first"
+              },
+              "tower_id": {
+                "aggregator": "first",
+                "operation": "first"
+              },
+      "app_in_use": {
+                "aggregator": "first",
+                "operation": "first"
+              },
+      "call_mos_score": {
+                "aggregator": "last",
+                "operation": "last"
+              },
+      "video_buffer_rate": {
+                "aggregator": "last",
+                "operation": "last"
+              }
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "filterByValue",
+                  "options": {
+                    "match": "all",
+                    "filters": [
+                      {
+                        "value": "${tower_id}",
+                        "property": "tower_id"
+                      }
+                    ]
+                  }
+                },
+                "property": "tower_id"
+              }
+            ],
+            "type": "include",
+            "match": "all"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Business KPIs - $sector",
+      "type": "timeseries",
+      "datasource": "DS_BUSINESS",
+      "gridPos": {
+        "h": 6,
+        "w": 18,
+        "x": 6,
+        "y": 19
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "new_support_tickets"
+            },
+            "properties": {
+              "custom.axisPlacement": "right",
+              "unit": "short"
+            }
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "churn_risk_percent"
+            },
+            "properties": {
+              "unit": "percent"
+            }
+          }
+        ]
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": "DS_BUSINESS",
+          "refId": "A",
+          "schema": {
+            "fields": [
+              {
+                "name": "timestamp",
+                "type": "time"
+              },
+              {
+                "name": "sector",
+                "type": "string"
+              },
+              {
+                "name": "churn_risk_percent",
+                "type": "number"
+              },
+              {
+                "name": "new_support_tickets",
+                "type": "number"
+              }
+            ],
+            "refId": "A"
+          },
+          "useFieldLabels": true
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "filterByValue",
+                  "options": {
+                    "match": "all",
+                    "filters": [
+                      {
+                        "value": "${sector}",
+                        "property": "sector"
+                      }
+                    ]
+                  }
+                },
+                "property": "sector"
+              }
+            ],
+            "type": "include",
+            "match": "all"
+          }
+        }
+      ]
+    },
+    {
+      "title": "RAN Health (Drill-Down) - $sector",
+      "type": "timeseries",
+      "datasource": "DS_RAN",
+      "gridPos": {
+        "h": 12,
+        "w": 6,
+        "x": 0,
+        "y": 7
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        },
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": []
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/prb_utilization/"
+            },
+            "properties": {
+              "custom.axisPlacement": "right",
+              "unit": "percent",
+              "custom.fillOpacity": 10
+            }
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "/avg_sinr/"
+            },
+            "properties": {
+              "unit": "dB"
+            }
+          }
+        ]
+      },
+      "pluginVersion": "11.0.0",
+      "targets": [
+        {
+          "datasource": "DS_RAN",
+          "refId": "A_SINR",
+          "schema": {
+            "fields": [
+              {
+                "name": "timestamp",
+                "type": "time"
+              },
+              {
+                "name": "tower_id",
+                "type": "string"
+              },
+              {
+                "name": "sector",
+                "type": "string"
+              },
+              {
+                "name": "avg_sinr",
+                "type": "number"
+              }
+            ],
+            "refId": "A_SINR"
+          },
+          "useFieldLabels": true
+        },
+        {
+          "datasource": "DS_RAN",
+          "refId": "B_UTIL",
+          "schema": {
+            "fields": [
+              {
+                "name": "timestamp",
+                "type": "time"
+              },
+              {
+                "name": "tower_id",
+                "type": "string"
+              },
+              {
+                "name": "sector",
+                "type": "string"
+              },
+              {
+                "name": "prb_utilization",
+                "type": "number"
+              }
+            ],
+            "refId": "B_UTIL"
+          },
+          "useFieldLabels": true
+        }
+      ],
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "filterByValue",
+                  "options": {
+                    "match": "all",
+                    "filters": [
+                      {
+                        "value": "${sector}",
+                        "property": "sector"
+                      }
+                    ]
+                  }
+                },
+                "property": "sector"
+              }
+            ],
+            "type": "include",
+            "match": "all"
+          }
+        },
+        {
+          "id": "labelsToFields",
+          "options": {
+            "labels": [
+              "tower_id"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "Sector_B",
+          "value": "Sector_B"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "sector",
+        "options": [
+          {
+            "selected": false,
+            "text": "Sector_A",
+            "value": "Sector_A"
+          },
+          {
+            "selected": true,
+            "text": "Sector_B",
+            "value": "Sector_B"
+          },
+          {
+            "selected": false,
+            "text": "Sector_C",
+            "value": "Sector_C"
+          }
+        ],
+        "query": "Sector_A,Sector_B,Sector_C",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "gNB-4402-B",
+          "value": "gNB-4402-B"
+        },
+        "datasource": "DS_RAN",
+        "definition": "tower_id",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Tower ID",
+        "multi": false,
+        "name": "tower_id",
+        "options": [],
+        "query": {
+          "datasource": "DS_RAN",
+          "refId": "TowerID-Query",
+          "schema": {
+            "fields": [
+              {
+                "name": "tower_id",
+                "type": "string"
+              }
+            ],
+            "refId": "TowerID-Query"
+          }
+        },
+        "refresh": 2,
+        "regex": "/^${sector:csv}[a-zA-Z0-9-]+/",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+    "An hour",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "5G Customer Experience (CX) Assurance",
+  "uid": "abcde-12345-fghij-67890-klmno",
+  "version": 1,
+  "weekStart": ""
+}
