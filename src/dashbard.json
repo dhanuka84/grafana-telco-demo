@@ -661,8 +661,8 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": false,
-            "displayName": "call_mos_score"
+            "desc": true,
+            "displayName": "tower_id"
           }
         ]
       },
@@ -712,6 +712,44 @@
         }
       ],
       "title": "Affected Customers (MOS < 3.5) – Filter by Tower",
+      "transformations": [
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "lower",
+                  "options": {
+                    "value": 3.5
+                  }
+                },
+                "fieldName": "call_mos_score"
+              }
+            ],
+            "match": "any",
+            "type": "include"
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "regex",
+                  "options": {
+                    "value": "${tower_id}"
+                  }
+                },
+                "fieldName": "tower_id"
+              }
+            ],
+            "match": "any",
+            "type": "include"
+          }
+        }
+      ],
       "type": "table"
     },
     {
@@ -883,7 +921,7 @@
     }
   ],
   "preload": false,
-  "refresh": "5s",
+  "refresh": "10s",
   "schemaVersion": 42,
   "tags": [],
   "templating": {
@@ -916,6 +954,7 @@
         "type": "custom"
       },
       {
+        "allValue": ".*",
         "current": {
           "text": "All",
           "value": "$__all"
@@ -954,5 +993,5 @@
   "timezone": "",
   "title": "5G Customer Experience (CX) Assurance",
   "uid": "telco-cx-demo-clean",
-  "version": 15
+  "version": 22
 }
