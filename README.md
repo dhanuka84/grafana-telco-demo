@@ -90,3 +90,26 @@ In your terminal, install the required Python packages:
 
 ```bash
 pip install -r requirements.txt
+
+### **`How to Do Your Demo Story`**
+
+`Once imported, your dashboard will spring to life.`
+
+1. **`Set the Time:`** `In the top right, set the time-picker to "Last 3 hours". This will show the full story (normal, incident, recovery).`  
+2. **`The "All Green" (Start):`** `Drag your mouse to select just the first hour of data on a graph. The dashboard will zoom in. All KPIs will be green. The "Affected Customers" table will be empty.`  
+3. **`The "Incident" (The "Aha!" Moment):`**  
+   * **`You:`** `"But let's see what happened at 10:05 AM..."`  
+   * **`Action:`** `Drag your mouse to select the middle hour of data.`  
+   * **`The Dashboard Explodes:`**  
+     * `The "Churn Risk" gauge will turn red.`  
+     * `The "Avg. MOS Score" gauge will plummet.`  
+     * `The "RAN Health" graph will show gNB-4402-B (the yellow line) dive in quality and spike in congestion.`  
+     * `The "Affected Customers" table will instantly fill up with users.`  
+4. **`The Drill-Down:`**  
+   * `At the top of the dashboard, there is a dropdown menu for "Tower ID".`  
+   * `Select gNB-4402-B.`  
+   * `The "Affected Customers" table will now only show the users on that specific tower.`  
+   * **`You:`** `"And just like that, we've gone from a high-level business problem—churn risk—directly to the root cause: a congested tower. And we can see a list of the 50 customers who are having a bad experience right now."`
+
+`You are all set. This gives you a complete, powerful, and data-driven story. Good luck!`
+
