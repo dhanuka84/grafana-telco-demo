@@ -19,7 +19,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
   "links": [],
   "panels": [
     {
@@ -179,92 +178,6 @@
           }
         }
       ],
-      "type": "gauge"
-    },
-    {
-      "datasource": "DS_CEM",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 2,
-          "mappings": [],
-          "max": 5,
-          "min": 1,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": 0
-              },
-              {
-                "color": "orange",
-                "value": 3.5
-              },
-              {
-                "color": "green",
-                "value": 4
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 6,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "/^call_mos_score$/",
-          "values": true
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
-      },
-      "pluginVersion": "12.4.0-19174562009.patch3",
-      "targets": [
-        {
-          "columns": [
-            {
-              "selector": "timestamp",
-              "type": "time"
-            },
-            {
-              "selector": "call_mos_score",
-              "type": "number"
-            }
-          ],
-          "datasource": "DS_CEM",
-          "filters": [],
-          "format": "table",
-          "global_query_id": "",
-          "parser": "backend",
-          "refId": "A",
-          "root_selector": "",
-          "source": "url",
-          "type": "csv",
-          "url": "https://raw.githubusercontent.com/dhanuka84/grafana-telco-demo/main/cem_metrics.csv",
-          "url_options": {
-            "data": "",
-            "method": "GET"
-          }
-        }
-      ],
-      "title": "Avg. Network MOS Score (All Sectors)",
       "type": "gauge"
     },
     {
@@ -918,10 +831,96 @@
         }
       ],
       "type": "timeseries"
+    },
+    {
+      "datasource": "DS_CEM",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "max": 5,
+          "min": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 3.5
+              },
+              {
+                "color": "green",
+                "value": 4
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 2,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "/^call_mos_score$/",
+          "values": true
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "12.4.0-19174562009.patch3",
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "timestamp",
+              "type": "time"
+            },
+            {
+              "selector": "call_mos_score",
+              "type": "number"
+            }
+          ],
+          "datasource": "DS_CEM",
+          "filters": [],
+          "format": "table",
+          "global_query_id": "",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "",
+          "source": "url",
+          "type": "csv",
+          "url": "https://raw.githubusercontent.com/dhanuka84/grafana-telco-demo/main/cem_metrics.csv",
+          "url_options": {
+            "data": "",
+            "method": "GET"
+          }
+        }
+      ],
+      "title": "Avg. Network MOS Score (All Sectors)",
+      "type": "gauge"
     }
   ],
   "preload": false,
-  "refresh": "10s",
+  "refresh": "5s",
   "schemaVersion": 42,
   "tags": [],
   "templating": {
@@ -993,5 +992,5 @@
   "timezone": "",
   "title": "5G Customer Experience (CX) Assurance",
   "uid": "telco-cx-demo-clean",
-  "version": 22
+  "version": 25
 }

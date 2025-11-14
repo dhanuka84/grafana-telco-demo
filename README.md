@@ -76,6 +76,117 @@ This dataset tells a complete story:
 4.  **The Business Impact** (churn risk and support tickets spike for that sector)
 5.  **Recovery**
 
+# Panel-by-Panel Explanation (Aligned With Telco CX Use Case)
+
+## 1️⃣ Churn Risk -- \$sector (Gauge)
+
+### What fields does it use?
+
+-   sector
+-   churn_risk_percent
+-   timestamp
+
+### Why these fields?
+
+Because this panel answers: \> "What is the churn probability for this
+sector right now?"
+
+It filters the dataset by the chosen sector, then reduces all churn
+values to a single number.
+
+### Meaning
+
+Shows business impact: unhappy customers → risk of churn.
+
+------------------------------------------------------------------------
+
+## 2️⃣ Avg. Network MOS Score (All Sectors) -- Gauge
+
+### Fields
+
+-   timestamp
+-   call_mos_score
+
+### Why?
+
+This is a global KPI of voice quality across the entire network.
+
+### Meaning
+
+MOS shows customer perception. Drops during incidents, normal after
+recovery.
+
+------------------------------------------------------------------------
+
+## 3️⃣ New Support Tickets -- \$sector (Stat Panel)
+
+### Fields
+
+-   sector
+-   new_support_tickets
+-   timestamp
+
+### Why?
+
+Shows real-time customer complaint volume.
+
+### Meaning
+
+Tickets spike when customers face issues → correlates experience to
+complaints.
+
+------------------------------------------------------------------------
+
+## 4️⃣ RAN Health (Drill-Down) -- \$sector (Time Series)
+
+### Fields
+
+-   timestamp
+-   tower_id
+-   sector
+-   avg_sinr
+-   prb_utilization
+
+### Why?
+
+Shows radio layer behavior: interference + congestion + tower identity.
+
+### Meaning
+
+Reveals root cause at network level.
+
+------------------------------------------------------------------------
+
+## 5️⃣ Affected Customers (MOS \< 3.5) -- Filter by Tower (Table)
+
+### Fields
+
+-   timestamp
+-   user_id
+-   tower_id
+-   app_in_use
+-   call_mos_score
+-   video_buffer_rate
+
+### Why?
+
+Identifies actual customers impacted and where.
+
+------------------------------------------------------------------------
+
+## 6️⃣ Business KPIs -- \$sector (Time Series)
+
+### Fields
+
+-   timestamp
+-   sector
+-   churn_risk_percent
+-   new_support_tickets
+
+### Why?
+
+Shows business impact timeline before, during, after incident.
+
 ---
 
 ## How to Use This Project
@@ -91,25 +202,101 @@ In your terminal, install the required Python packages:
 ```bash
 pip install -r requirements.txt
 
+--- 
+
 ### **`How to Do Your Demo Story`**
 
-`Once imported, your dashboard will spring to life.`
+## 3. The Demo Story – *How to present it*
 
-1. **`Set the Time:`** `In the top right, set the time-picker to "Last 3 hours". This will show the full story (normal, incident, recovery).`  
-2. **`The "All Green" (Start):`** `Drag your mouse to select just the first hour of data on a graph. The dashboard will zoom in. All KPIs will be green. The "Affected Customers" table will be empty.`  
-3. **`The "Incident" (The "Aha!" Moment):`**  
-   * **`You:`** `"But let's see what happened at 10:05 AM..."`  
-   * **`Action:`** `Drag your mouse to select the middle hour of data.`  
-   * **`The Dashboard Explodes:`**  
-     * `The "Churn Risk" gauge will turn red.`  
-     * `The "Avg. MOS Score" gauge will plummet.`  
-     * `The "RAN Health" graph will show gNB-4402-B (the yellow line) dive in quality and spike in congestion.`  
-     * `The "Affected Customers" table will instantly fill up with users.`  
-4. **`The Drill-Down:`**  
-   * `At the top of the dashboard, there is a dropdown menu for "Tower ID".`  
-   * `Select gNB-4402-B.`  
-   * `The "Affected Customers" table will now only show the users on that specific tower.`  
-   * **`You:`** `"And just like that, we've gone from a high-level business problem—churn risk—directly to the root cause: a congested tower. And we can see a list of the 50 customers who are having a bad experience right now."`
+You’re not just clicking around a dashboard; you’re telling a story.
 
-`You are all set. This gives you a complete, powerful, and data-driven story. Good luck!`
+### Scene 1 – Normal Operations (“All Green”)
 
+> “Here we see our network running normally.”
+
+- **Avg. Network MOS Score** ≈ **4.2** (excellent).
+- **Churn risk** in all sectors \< 5%.
+- **RAN Health** shows stable SINR and moderate PRB utilization.
+- **Affected Customers** table is empty (no severe issues).
+
+👉 In Grafana:
+- Set the time range to **Last 3 hours**.
+- Drag-select the **first hour** of data on any time-series panel to zoom in.
+
+---
+
+### Scene 2 – The Incident (Technical Root Cause)
+
+> “Now let’s see what happened around **10:05 AM**…”
+
+- Zoom into the **middle hour** of the timeline.
+- In **RAN Health**, focus on **Sector_B**:
+  - Tower **`gNB-4402-B`** suddenly shows:
+    - **PRB utilization** ≈ 98% (severe congestion).
+    - **SINR** drops to around **2 dB** (poor signal quality).
+- This is your **technical failure**.
+
+The network layer sees a problem, but we’re not stopping there.
+
+---
+
+### Scene 3 – The Customer Impact (Experience Correlation)
+
+> “Let’s see how this impacted real people.”
+
+- Check **Avg. Network MOS Score**:
+  - The gauge dips sharply during the incident window.
+- Open **Affected Customers (MOS \< 3.5) – Filter by Tower**:
+  - The table fills with ~50 users.
+  - Their **MOS score** drops below **2.0**.
+  - **Video buffering** jumps to around **25%**.
+  - All of them are connected to **`gNB-4402-B`**.
+
+👉 In Grafana:
+- Use the **Tower ID** dropdown and select **`gNB-4402-B`**.
+- The table now shows only the impacted users on that tower.
+
+---
+
+### Scene 4 – The Business Risk (Consequence)
+
+> “Now, what does this mean for the business?”
+
+- Look at **Churn Risk – Sector_B**:
+  - The gauge spikes to ~**18%** during the incident.
+- Look at **New Support Tickets – Sector_B**:
+  - Ticket volume surges in the same time window.
+
+The dashboard effectively says:
+
+> **“Fix `gNB-4402-B` now – or you’re going to lose these customers.”**
+
+Finally, zoom into the **last hour** to see the **recovery**:
+- RAN metrics normalize.
+- MOS scores improve.
+- Churn risk and ticket volume return to baseline.
+
+---
+
+## 4. Key KPIs in the Dashboard
+
+- **Churn Risk %**  
+  Probability that customers in a sector will churn, derived from recent experience.
+
+- **MOS Score (Mean Opinion Score)**  
+  1–5 rating of perceived call quality  
+  *(1 = Bad, 5 = Excellent).*
+
+- **PRB Utilization (%)**  
+  How “full” the cell tower is — a measure of RAN congestion.
+
+- **SINR (dB)**  
+  Signal-to-Interference-plus-Noise Ratio — how clean the radio signal is.
+
+- **Video Buffer Rate (%)**  
+  How much time video sessions spend buffering.
+
+- **New Support Tickets**  
+  Operational proxy for customer frustration.
+
+---
